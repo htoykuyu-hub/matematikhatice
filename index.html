@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matematik Portalı - Ders İçerikleri</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax for LaTeX / Math formulas rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .math-card {
+            transition: all 0.25s ease-in-out;
+        }
+        .math-card:hover {
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <header class="sticky top-0 z-50 glass-effect border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo & Teacher Info -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                        <i class="fa-solid font-bold text-lg">π</i>
+                    </div>
+                    <div>
+                        <span class="text-lg font-bold text-slate-900 tracking-tight block leading-tight">Matematik Akademi</span>
+                        <span class="text-xs font-medium text-slate-500">Hatice Hoca | Ders Portalı</span>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    </span>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Konu, test veya çalışma kağıdı ara... (ör: Üslü Sayılar)" class="w-full pl-9 pr-4 py-2 bg-slate-100 hover:bg-slate-200/70 focus:bg-white text-sm rounded-xl border border-transparent focus:border-brand-500 focus:outline-none transition-all">
+                </div>
+
+                <!-- Admin Action / Mobile Menu Button -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="openAddModal()" class="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-sm transition-all">
+                        <i class="fa-solid fa-plus mr-2 text-xs"></i> Yeni İçerik Ekle
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search Bar Bar -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                </span>
+                <input type="text" id="mobileSearchInput" oninput="handleSearchMobile()" placeholder="İçerik ara..." class="w-full pl-9 pr-4 py-2 bg-slate-100 text-sm rounded-xl border border-transparent focus:border-brand-500 focus:outline-none">
+            </div>
+        </div>
+    </header>
+
+    <section class="bg-gradient-to-r from-brand-900 via-brand-700 to-indigo-800 text-white py-10 px-4 sm:px-6 lg:px-8 shadow-inner">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-2 text-center md:text-left">
+                <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-medium text-brand-100 border border-white/10">
+                    🎓 2026-2027 Eğitim Öğretim Yılı İçerikleri
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Hoş Geldiniz, Sevgili Öğrencilerim!</h1>
+                <p class="text-brand-100 text-sm max-w-2xl">
+                    Sınıf seviyenize uygun ders notları, çalışma yaprakları, deneme sınavları ve çözüm videolarına aşağıdan kolayca ulaşabilirsiniz.
+                </p>
+            </div>
+            <!-- Quick Stats -->
+            <div class="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 text-center">
+                <div class="px-3">
+                    <div class="text-2xl font-bold" id="statContentCount">0</div>
+                    <div class="text-xs text-brand-200">Toplam İçerik</div>
+                </div>
+                <div class="w-px h-8 bg-white/20"></div>
+                <div class="px-3">
+                    <div class="text-2xl font-bold">4</div>
+                    <div class="text-xs text-brand-200">Sınıf Seviyesi</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        
+        <!-- Grade Navigation Tabs -->
+        <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-6 overflow-x-auto no-scrollbar">
+            <div class="flex space-x-2 sm:space-x-4 min-w-max" id="gradeTabs">
+                <button onclick="selectGrade('all')" class="grade-tab px-4 py-2.5 rounded-xl font-medium text-sm transition-all bg-brand-600 text-white shadow-sm shadow-brand-500/30" data-grade="all">
+                    <i class="fa-solid fa-layer-group mr-1.5"></i>Tümü
+                </button>
+                <button onclick="selectGrade('5')" class="grade-tab px-4 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-600 hover:bg-slate-200/60" data-grade="5">
+                    5. Sınıf
+                </button>
+                <button onclick="selectGrade('6')" class="grade-tab px-4 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-600 hover:bg-slate-200/60" data-grade="6">
+                    6. Sınıf
+                </button>
+                <button onclick="selectGrade('7')" class="grade-tab px-4 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-600 hover:bg-slate-200/60" data-grade="7">
+                    7. Sınıf
+                </button>
+                <button onclick="selectGrade('8')" class="grade-tab px-4 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-600 hover:bg-slate-200/60" data-grade="8">
+                    8. Sınıf (LGS)
+                </button>
+            </div>
+        </div>
+
+        <!-- Category Pill Filters -->
+        <div class="flex flex-wrap items-center gap-2 mb-8">
+            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-2">Filtrele:</span>
+            <button onclick="selectCategory('all')" class="cat-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-brand-500 bg-brand-50 text-brand-700 transition-all" data-cat="all">Tüm Materyaller</button>
+            <button onclick="selectCategory('ders-notu')" class="cat-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-all" data-cat="ders-notu">📘 Ders Notları</button>
+            <button onclick="selectCategory('calisma-kagidi')" class="cat-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-all" data-cat="calisma-kagidi">📝 Çalışma Kağıtları</button>
+            <button onclick="selectCategory('test-sınav')" class="cat-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-all" data-cat="test-sınav">🎯 Testler & Sınavlar</button>
+            <button onclick="selectCategory('video')" class="cat-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-all" data-cat="video">🎬 Video Çözümler</button>
+        </div>
+
+        <!-- Active View Status Banner -->
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-bold text-slate-900" id="currentViewTitle">Tüm Ders İçerikleri</h2>
+            <span class="text-xs text-slate-500 font-medium" id="itemCountLabel">0 içerik listeleniyor</span>
+        </div>
+
+        <div id="contentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Content items injected via JavaScript -->
+        </div>
+
+        <!-- Empty State View -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center">
+            <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-2xl mb-4">
+                <i class="fa-solid fa-folder-open"></i>
+            </div>
+            <h3 class="text-base font-semibold text-slate-800">Henüz Bu Kategoride İçerik Yok</h3>
+            <p class="text-sm text-slate-500 mt-1 max-w-md">Seçili sınıf veya kategoride içerik bulunamadı. "Yeni İçerik Ekle" butonunu kullanarak yeni materyal yükleyebilirsiniz.</p>
+        </div>
+
+    </main>
+
+    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-slate-100 flex items-start justify-between bg-slate-50">
+                <div class="space-y-1">
+                    <span id="modalGradeBadge" class="inline-block px-2.5 py-0.5 bg-brand-100 text-brand-700 font-medium text-xs rounded-md">8. Sınıf</span>
+                    <h3 id="modalTitle" class="text-xl font-bold text-slate-900">İçerik Başlığı</h3>
+                </div>
+                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-600 text-lg w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-200/50">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4 text-sm text-slate-600 leading-relaxed" id="modalBody">
+                <!-- Content Detail -->
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+                <span class="text-xs text-slate-400" id="modalDate">Ekleme Tarihi: --</span>
+                <div class="flex space-x-2">
+                    <button onclick="deleteCurrentItem()" class="px-3 py-2 text-red-600 hover:bg-red-50 font-medium text-xs rounded-xl transition-all">
+                        <i class="fa-solid fa-trash mr-1"></i> Sil
+                    </button>
+                    <a id="modalDownloadBtn" href="#" target="_blank" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs rounded-xl transition-all inline-flex items-center">
+                        <i class="fa-solid fa-download mr-1.5"></i> İndir / İncele
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <h3 class="text-base font-bold text-slate-900 flex items-center">
+                    <i class="fa-solid fa-plus-circle text-brand-600 mr-2"></i> Yeni Ders İçeriği Ekle
+                </h3>
+                <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="addContentForm" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4 text-sm">
+                <div>
+                    <label class="block font-medium text-slate-700 mb-1">Sınıf Seviyesi</label>
+                    <select id="formGrade" required class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-brand-500 focus:outline-none">
+                        <option value="5">5. Sınıf</option>
+                        <option value="6">6. Sınıf</option>
+                        <option value="7">7. Sınıf</option>
+                        <option value="8">8. Sınıf (LGS)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-700 mb-1">İçerik Türü</label>
+                    <select id="formCategory" required class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-brand-500 focus:outline-none">
+                        <option value="ders-notu">📘 Ders Notu</option>
+                        <option value="calisma-kagidi">📝 Çalışma Kağıdı / Ödev</option>
+                        <option value="test-sınav">🎯 Test / Yazılı Sınav</option>
+                        <option value="video">🎬 Video Çözüm</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-700 mb-1">Konu Başlığı</label>
+                    <input type="text" id="formTitle" required placeholder="ör: Kareköklü İfadeler ve Özellikleri" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-brand-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-700 mb-1">Açıklama / Notlar (Formül desteği için TeX $...$ yazabilirsiniz)</label>
+                    <textarea id="formDescription" rows="3" placeholder="Öğrenciler için yönlendirme veya konu özeti..." class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-brand-500 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block font-medium text-slate-700 mb-1">İndirme / Bağlantı URL (PDF veya Video Linki)</label>
+                    <input type="url" id="formUrl" placeholder="https://drive.google.com/... veya PDF linki" class="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-brand-500 focus:outline-none">
+                </div>
+                <div class="pt-2 flex justify-end space-x-3">
+                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 border border-slate-200 text-slate-600 rounded-xl font-medium hover:bg-slate-50">İptal</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-medium shadow-sm">Kaydet ve Yayınla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 mt-auto py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <div>
+                © 2026 Hatice Hoca Matematik Portalı. Tüm hakları saklıdır.
+            </div>
+            <div class="flex items-center space-x-4">
+                <span><i class="fa-solid fa-book-open mr-1"></i> Müfredata Uygun</span>
+                <span><i class="fa-solid fa-shield-halved mr-1"></i> Güvenli İçerik</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample Initial Data for Demo
+        let contents = [
+            {
+                id: 1,
+                grade: "8",
+                category: "ders-notu",
+                title: "Üslü İfadeler ve Temel Kurallar Özet Notu",
+                description: "Üslü ifadelerde çarpma, bölme ve üssün üssü kurallarını içeren özet konu anlatım fasikülü. Formül: $a^m \\cdot a^n = a^{m+n}$",
+                url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                date: "12 Ekim 2026"
+            },
+            {
+                id: 2,
+                grade: "8",
+                category: "test-sınav",
+                title: "LGS Tipi Çarpanlar ve Katlar Kazanım Testi",
+                description: "EBOB-EKOK problemleri ve yeni nesil mantık muhakeme soruları. Toplam 20 soru, cevap anahtarlı.",
+                url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                date: "10 Ekim 2026"
+            },
+            {
+                id: 3,
+                grade: "7",
+                category: "calisma-kagidi",
+                title: "Tam Sayılarla İşlemler Çalışma Yaprağı",
+                description: "Toplama, çıkarma, çarpma ve bölme kuralları alıştırmaları. 30 adet pekiştirme sorusu.",
+                url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                date: "08 Ekim 2026"
+            },
+            {
+                id: 4,
+                grade: "6",
+                category: "ders-notu",
+                title: "Açılar ve Komşu Açılar Konu Anlatımı",
+                description: "Tümler, bütünler ve ters açılar kavramları, renkli görseller ve basit anlatım dili ile.",
+                url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                date: "05 Ekim 2026"
+            },
+            {
+                id: 5,
+                grade: "5",
+                category: "calisma-kagidi",
+                title: "Kesirlerle Toplama ve Çıkarma Etkinliği",
+                description: "Paydaları eşit ve eşit olmayan kesirlerde işlem yapma becerisi kazandıran eğlenceli etkinlik.",
+                url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                date: "01 Ekim 2026"
+            },
+            {
+                id: 6,
+                grade: "8",
+                category: "video",
+                title: "Kareköklü İfadeler Soru Çözüm Videosu",
+                description: "MEB Örnek Soruları ayarında 10 adet karekök sorusunun detaylı soru çözümü.",
+                url: "https://www.youtube.com",
+                date: "28 Eylül 2026"
+            }
+        ];
+
+        let selectedGrade = 'all';
+        let selectedCat = 'all';
+        let searchQuery = '';
+        let activeItemId = null;
+
+        // Load saved contents from LocalStorage if available
+        if (localStorage.getItem('hatice_math_portal_contents')) {
+            try {
+                contents = JSON.parse(localStorage.getItem('hatice_math_portal_contents'));
+            } catch (e) {
+                console.error('LocalStorage parsing error');
+            }
+        }
+
+        function saveContents() {
+            localStorage.setItem('hatice_math_portal_contents', JSON.stringify(contents));
+        }
+
+        // Category Meta Info mapping
+        const categoryMeta = {
+            'ders-notu': { label: 'Ders Notu', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: 'fa-book' },
+            'calisma-kagidi': { label: 'Çalışma Kağıdı', color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: 'fa-file-lines' },
+            'test-sınav': { label: 'Test / Sınav', color: 'bg-purple-50 text-purple-700 border-purple-200', icon: 'fa-bullseye' },
+            'video': { label: 'Video Çözüm', color: 'bg-rose-50 text-rose-700 border-rose-200', icon: 'fa-circle-play' }
+        };
+
+        // Initialize view on page load
+        window.onload = function() {
+            renderContent();
+        };
+
+        function selectGrade(grade) {
+            selectedGrade = grade;
+            document.querySelectorAll('.grade-tab').forEach(btn => {
+                if (btn.dataset.grade === grade) {
+                    btn.className = 'grade-tab px-4 py-2.5 rounded-xl font-medium text-sm transition-all bg-brand-600 text-white shadow-sm shadow-brand-500/30';
+                } else {
+                    btn.className = 'grade-tab px-4 py-2.5 rounded-xl font-medium text-sm transition-all text-slate-600 hover:bg-slate-200/60';
+                }
+            });
+            updateViewTitle();
+            renderContent();
+        }
+
+        function selectCategory(cat) {
+            selectedCat = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = 'cat-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-brand-500 bg-brand-50 text-brand-700 transition-all';
+                } else {
+                    btn.className = 'cat-pill px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-all';
+                }
+            });
+            renderContent();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderContent();
+        }
+
+        function handleSearchMobile() {
+            searchQuery = document.getElementById('mobileSearchInput').value.toLowerCase();
+            renderContent();
+        }
+
+        function updateViewTitle() {
+            const titleEl = document.getElementById('currentViewTitle');
+            if (selectedGrade === 'all') {
+                titleEl.textContent = 'Tüm Ders İçerikleri';
+            } else {
+                titleEl.textContent = `${selectedGrade}. Sınıf Matematik İçerikleri`;
+            }
+        }
+
+        function renderContent() {
+            const grid = document.getElementById('contentGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            // Filter logic
+            const filtered = contents.filter(item => {
+                const matchGrade = selectedGrade === 'all' || item.grade === selectedGrade;
+                const matchCat = selectedCat === 'all' || item.category === selectedCat;
+                const matchSearch = item.title.toLowerCase().includes(searchQuery) || item.description.toLowerCase().includes(searchQuery);
+                return matchGrade && matchCat && matchSearch;
+            });
+
+            // Update stats
+            document.getElementById('statContentCount').textContent = contents.length;
+            document.getElementById('itemCountLabel').textContent = `${filtered.length} içerik listeleniyor`;
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+
+                filtered.forEach(item => {
+                    const meta = categoryMeta[item.category] || { label: 'Materyal', color: 'bg-slate-100 text-slate-700', icon: 'fa-file' };
+                    
+                    const card = document.createElement('div');
+                    card.className = 'math-card bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md flex flex-col justify-between cursor-pointer';
+                    card.onclick = () => openDetailModal(item.id);
+
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-semibold border ${meta.color} flex items-center gap-1.5">
+                                    <i class="fa-solid ${meta.icon}"></i> ${meta.label}
+                                </span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md text-xs font-medium">
+                                    ${item.grade}. Sınıf
+                                </span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-800 hover:text-brand-600 line-clamp-2 mb-2 transition-colors">
+                                ${item.title}
+                            </h3>
+                            <p class="text-slate-500 text-xs line-clamp-3 leading-relaxed mb-4">
+                                ${item.description}
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+                            <span><i class="fa-regular fa-calendar mr-1"></i> ${item.date}</span>
+                            <span class="text-brand-600 font-semibold group flex items-center">
+                                İncele <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+                            </span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            // Trigger MathJax re-render if loaded
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Modal Handlers
+        function openDetailModal(id) {
+            const item = contents.find(c => c.id === id);
+            if (!item) return;
+
+            activeItemId = id;
+            document.getElementById('modalTitle').textContent = item.title;
+            document.getElementById('modalGradeBadge').textContent = `${item.grade}. Sınıf`;
+            document.getElementById('modalBody').innerHTML = `<p>${item.description}</p>`;
+            document.getElementById('modalDate').textContent = `Yayınlanma Tarihi: ${item.date}`;
+            
+            const dlBtn = document.getElementById('modalDownloadBtn');
+            dlBtn.href = item.url || '#';
+            if (item.category === 'video') {
+                dlBtn.innerHTML = '<i class="fa-solid fa-play mr-1.5"></i> Videoyu İzle';
+            } else {
+                dlBtn.innerHTML = '<i class="fa-solid fa-download mr-1.5"></i> Dokümanı İndir';
+            }
+
+            document.getElementById('detailModal').classList.remove('hidden');
+
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+            activeItemId = null;
+        }
+
+        function openAddModal() {
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.add('hidden');
+            document.getElementById('addContentForm').reset();
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const grade = document.getElementById('formGrade').value;
+            const category = document.getElementById('formCategory').value;
+            const title = document.getElementById('formTitle').value.trim();
+            const description = document.getElementById('formDescription').value.trim();
+            const url = document.getElementById('formUrl').value.trim() || 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+
+            const newItem = {
+                id: Date.now(),
+                grade,
+                category,
+                title,
+                description,
+                url,
+                date: new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+            };
+
+            contents.unshift(newItem);
+            saveContents();
+            renderContent();
+            closeAddModal();
+        }
+
+        function deleteCurrentItem() {
+            if (!activeItemId) return;
+            if (confirm('Bu içeriği silmek istediğinize emin misiniz?')) {
+                contents = contents.filter(c => c.id !== activeItemId);
+                saveContents();
+                closeDetailModal();
+                renderContent();
+            }
+        }
+    </script>
+</body>
+</html>
